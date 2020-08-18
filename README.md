@@ -19,21 +19,31 @@
   + [Indentation](#indentation)
   + [Line Length](#line-length)
   + [Vertical Spacing](#vertical-spacing)
-- [Semicolons](#semicolons)
-- [Getters & Setters](#getters--setters)
-- [Brace Style](#brace-style)
-- [When Statements](#when-statements)
-- [Annotations](#annotations)
+- [Coding Rules](#coding-rules)
+  + [Semicolons](#semicolons)
+  + [Getters & Setters](#getters--setters)
+  + [Brace Style](#brace-style)
+  + [When Statements](#when-statements)
+  + [Use an IDE suggestion](#use-an-ide-suggestion)
+  + [Use a smart cast](#use-a-smart-cast)
+  + [`it` in Lambda expression applies to wide scope](#it-in-lambda-expression-applies-to-wide-scope)
+  + [Should use a type interface](#should-use-a-type-interface)
+  + [Don't write for loop](#dont-write-for-loop)
+  + [Use `to` expression creating `Pair` class](#use-to-expression-creating-pair-class)
+  + [Use `when` in case there are two or more branches of `if-else`](#use-when-in-case-there-are-two-or-more-branches-of-if-else)
+  + [Use `is` in case of comparing a class type](#use-is-in-case-of-comparing-a-class-type)
+  + [Use `range` in case comparing Int values](#use-range-in-case-comparing-int-values)
+  + [Don't start a new line in variable declaration using `if-else`](#dont-start-a-new-line-in-variable-declaration-using-if-else)
 - [Types](#types)
   + [Type Inference](#type-inference)
   + [Constants vs. Variables](#constants-vs-variables)
   + [Companion Objects](#companion-objects)
-  + [Optionals](#optionals)
 - [XML Guidance](#xml-guidance)
   + [XML File Names](#xml-file-names)
   + [Indentation](#indentation-1)
   + [Use Context-Specific XML Files](#use-context-specific-xml-files)
   + [XML Attribute Ordering](#xml-attribute-ordering)
+  + [View IDs](#view-ids)
 - [Language](#language)
 
 ## Nomenclature
@@ -91,6 +101,35 @@ companion object {
 Written in __lowerCamelCase__.
 
 Single character values must be avoided, except for temporary looping variables.
+
+Abbreviations in variable names are strongly discouraged. Acronyms may be used if they are standard nomenclature (commonly used in place of their longhand counterparts).
+
+__BAD:__
+
+```kotlin
+val bookTtl = "Programming 101"
+val ipAddr = "127.0.0.1"
+```
+__GOOD:__
+
+```kotlin
+val bookTitle = "Programming 101"
+val ipAddress = "127.0.0.1"
+```
+
+Boolean Feature Flags configured remotely should be named such that true coresponds to the feature being enabled and false is disabled.
+
+__BAD:__
+
+```kotlin
+val featureAbc = ExampleRemoteBoolean("feature_abc_disabled", true)  // WRONG! true would result in feature being enabled
+```
+__GOOD:__
+
+```kotlin
+val featureAbc = ExampleRemoteBoolean("feature_abc", true) // Okay, defaults to enabled
+val featureAbc = ExampleRemoteBoolean("feature_abc", false) // Okay, defaults to disabled
+```
 
 ### Misc
 
@@ -239,8 +278,9 @@ When they are needed, use comments to explain **why** a particular piece of code
 
 Avoid block comments inline with code, as the code should be as self-documenting as possible. *Exception: This does not apply to those comments used to generate documentation.*
 
+## Coding Rules
 
-## Semicolons
+### Semicolons
 
 Semicolons ~~are dead to us~~ should be avoided wherever possible in Kotlin. 
 
@@ -262,13 +302,13 @@ if (horseGiftedByTrojans) {
 }
 ```
 
-## Getters & Setters
+### Getters & Setters
 
 Unlike Java, direct access to fields in Kotlin is preferred. 
 
 If custom getters and setters are required, they should be declared [following Kotlin conventions](https://kotlinlang.org/docs/reference/properties.html) rather than as separate methods.
 
-## Brace Style
+### Brace Style
 
 Only trailing closing-braces are awarded their own line. All others appear the same line as preceding code:
 
@@ -324,7 +364,7 @@ if (someTest) {
 if (someTest) { doSomethingElse() }
 ```
 
-## When Statements
+### When Statements
 
 Unlike `switch` statements in Java, `when` statements do not fall through. Separate cases using commas if they should be handled the same way. Always include the else case.
 
@@ -347,7 +387,249 @@ when (anInput) {
   else -> println("No case satisfied")
 }
 ```
+### Idiom
 
+#### Use an IDE suggestion
+
+```kotlin
+val array = ArrayList<Int>()
+
+// bad
+array.get(0)    
+
+// good
+array[0]
+
+
+// bad
+getActivity().finish()
+
+// good
+activity.finish()
+
+```
+
+#### Use a smart cast
+
+```kotlin
+fun hoge(value: Boolean?) {
+    value ?: return
+    if (value) {
+
+    }
+}
+
+fun hoge(context: Context) {
+    context as Activity
+    context.finish() // finish activity
+}
+
+// bad
+if (hoge !is Hoge) {
+    throw IllegalArgumentException("not Hoge!")
+}
+hoge.foo()
+
+// good
+hoge as? Hoge ?: throw IllegalArgumentException("not Hoge!")
+hoge.foo()
+```
+
+#### `it` in Lambda expression applies to wide scope
+
+```kotlin
+// bad
+{ hoge -> 
+  hoge?.let { it.foo() }
+}
+
+// good
+{ 
+  it?.let { hoge -> hoge.foo() }
+}
+```
+
+#### Should use a type interface
+
+You can write a type if it is difficult to understand.
+
+* property
+
+```kotlin
+val hoge = 0  // Int
+val foo = 10L // Long
+val bar = 100f //Float
+```
+
+* function
+
+```Kotlin
+// return Boolean
+fun Context.isConnectToWifi() =
+      (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+         .activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI
+
+// return Point
+fun Display.getSize(): Point = Point().apply { getSize(this) }
+```
+
+#### Don't write for loop
+
+You don't have to write for loop because threre is `forEach` in collections package of Kotlin.
+
+```kotlin
+// not good
+for (i in 0..9) {
+}
+
+// good
+(0..9).forEach {
+}
+
+// good (if you want to know index)
+(0..9).forEachIndexed { index, value ->
+}
+```
+
+#### Use `to` expression creating `Pair` class
+
+```kotlin
+// bad
+val pair = Pair(foo, bar) 
+
+// good 
+val pair = foo to bar
+```
+
+* `to` is infix function
+
+`public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that)`
+
+#### Use `range`
+
+```kotlin
+val char = 'K'
+
+// bad
+if (char >= 'A' && 'c' <= 'Z') print("Hit!")
+
+// good
+if (char in 'A'..'Z') print("Hit!")
+
+when (char) {
+   in 'A'..'Z' -> print("Hit!")
+   else -> return
+}
+```
+
+#### Use `when` in case there are two or more branches of if-else
+
+```kotlin
+// bad
+val hoge = 10if (hoge > 10) {
+
+} else if (hoge > 5) {
+
+} else if (hoge > 0) {
+
+} else {
+
+}
+
+// good
+when {
+    hoge > 10 -> print("10")
+    hoge > 5 -> print("0")
+    hoge > 0 -> print("0")
+    else -> print("else")
+}
+```
+
+#### Use `is` in case of comparing a class type
+
+```kotlin
+val hoge: Hoge = Hoge()
+when (hoge) {
+    is Hoge -> {
+
+    }
+    else -> {
+       
+    }
+}
+```
+
+#### Use `range` in case comparing Int values
+
+```kotlin
+val hoge = 10
+when (hoge) {
+    in 0..4 -> print("0..4")
+    in 5..10 -> print("5..10")
+}
+```
+
+#### Don't start a new line in variable declaration using if-else 
+
+```kotlin
+val foo: Int = 5
+
+// bad
+val bar = if (foo > 10) {
+    "kotlin"
+} else {
+    "java"
+}
+
+// good
+val bar = if(foo > 10) "kotlin" else "java"
+```
+
+#### Don't use `!!`
+
+Don't use `!!`, it will erase the benefits of Kotlin.  
+You use it only when you want to explicitly raise a Null Pointer Exception.
+
+#### Use a scope function in case of checking a null value
+
+```Kotlin
+class Hoge {
+    fun fun1() {}
+    fun fun2() {}
+    fun fun3() = true
+}
+
+var hoge: Hoge? = null
+
+// not good
+if (hoge != null) {
+    hoge.fun1()
+} else {
+    val hoge = Hoge()
+    hoge.fun1()
+    hoge.fun2()
+}
+
+// good
+hoge?.run { 
+   fun1()
+} ?: run {
+    hoge = Hoge().apply {
+        fun1()
+        fun2()
+    }
+}
+
+// good
+if (hoge != null && hoge.fun3()) {
+    hoge.fun1()
+} else {
+    hoge = Hoge().apply {
+       fun1()
+       fun2()
+    }
+}
+```
 
 ## Types 
 
@@ -452,6 +734,31 @@ Where appropriate, XML attributes should appear in the following order:
 
 Within each of these groups, the attributes should be ordered alphabetically.
 
+### View IDs
+
+When Kotlin extensions are used (and view IDs are made available via import), view ID names (android:id in XML) should be all lowercase with underscores separating words (snake_case). It is required that every name have at least one underscore to distinguish it from local variables. In instances were it proves difficult, then name may be postfixed with the component type (e.g. _button or _view).
+
+__BAD:__
+
+```xml
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/moves"
+    />
+```
+
+```xml
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/danceMoves"
+    />
+```
+
+__GOOD:__
+
+```xml
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/dance_moves"
+    />
+```
 
 ## Language
 
