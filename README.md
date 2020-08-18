@@ -36,6 +36,13 @@ A set of rules base on current context of the ViettelPay App development
   + [Use `is` in case of comparing a class type](#use-is-in-case-of-comparing-a-class-type)
   + [Use `range` in case comparing Int values](#use-range-in-case-comparing-int-values)
   + [Don't start a new line in variable declaration using `if-else`](#dont-start-a-new-line-in-variable-declaration-using-if-else)
+- [Code guidelines](#code-guidelines)
+  + [Never ignore exceptions](#never-ignore-exceptions)
+  + [Never catch generic exceptions](#never-catch-generic-exceptions)
+  + [Using try-catch over throw exception](#using-try-catch-over-throw-exception)
+  + [Never use Finalizers](#never-use-finalizers)
+  + [Fully qualify imports](#fully-qualify-imports)
+  + [Don't keep unused imports](#dont-keep-unused-imports)
 - [Scope function](#scope-function)
   + [Should use scope function](#should-use-scope-function)
   + [Don't declare variables that used only once](#dont-declare-variables-that-used-only-once)
@@ -724,6 +731,100 @@ Hoge().run {
    }
 }
 ```
+
+## Code guidelines
+
+### Never ignore exceptions
+
+Avoid not handling exceptions in the correct manner. For example:
+
+__BAD:__
+```kotlin
+fun setUserId(id: String) {
+  try {
+    mUserId = id.toInt()
+  } catch (e: NumberFormatException) {
+  }
+}
+```
+
+This gives no information to both the developer and the user, making it harder to debug and could also leave the user confused if something goes wrong. When catching an exception, we should also always log the error to the console for debugging purposes and if necessary alert the user of the issue. For example:
+
+__GOOD:__
+```kotlin
+fun setCount(count: String?) {
+  var count = count
+    try {
+      count = id.toInt()
+    } catch (e: NumberFormatException) {
+      count = 0
+      Log.e(TAG, "There was an error parsing the count $e")
+      DialogFactory.showErrorMessage(R.string.error_message_parsing_count)
+    }
+}
+```
+
+Here we handle the error appropriately by:
+
+- Showing a message to the user notifying them that there has been an error
+- Setting a default value for the variable if possible
+- Throw an appropriate exception
+
+### Never catch generic exceptions
+
+Catching exceptions generally should not be done
+
+Why? Do not do this. In almost all cases it is inappropriate to catch generic Exception or Throwable (preferably not Throwable because it includes Error exceptions). It is very dangerous because it means that Exceptions you never expected (including RuntimeExceptions like ClassCastException) get caught in application-level error handling. It obscures the failure handling properties of your code, meaning if someone adds a new type of Exception in the code you're calling, the compiler won't help you realize you need to handle the error differently. In most cases you shouldn't be handling different types of exception the same way.
+
+__BAD:__
+```kotlin
+fun openCustomTab(context: Context, uri: Uri?) {
+  val intent: Intent = buildIntent(context, uri)
+  try {
+    context.startActivity(intent)
+  } catch (e: Exception) {
+    Log.e(TAG, "There was an error opening the custom tab $e")
+  }
+}
+```
+
+__GOOD:__
+```kotlin
+fun openCustomTab(context: Context, uri: Uri?) {
+  val intent: Intent = buildIntent(context, uri)
+  try {
+    context.startActivity(intent)
+  } catch (e: ActivityNotFoundException) {
+    Log.e(TAG, "There was an error opening the custom tab $e")
+  }
+}
+```
+
+### Using try-catch over throw exception
+
+Using try-catch statements improves the readability of the code where the exception is taking place. This is because the error is handled where it occurs, making it easier to both debug or make a change to how the error is handled.
+
+### Never use Finalizers
+
+There are no guarantees as to when a finalizer will be called, or even that it will be called at all. In most cases, you can do what you need from a finalizer with good exception handling. If you absolutely need it, define a close() method (or the like) and document exactly when that method needs to be called. See InputStreamfor an example. In this case it is appropriate but not required to print a short log message from the finalizer, as long as it is not expected to flood the logs.
+
+### Fully qualify imports
+
+When declaring imports, use the full package declaration.
+
+__BAD:__
+```kotlin
+import android.support.v7.widget.*;
+```
+
+__GOOD:__
+```kotlin
+import android.support.v7.widget.RecyclerView;
+```
+
+### Don't keep unused imports
+
+Sometimes removing code from a class can mean that some imports are no longer needed. If this is the case then the corresponding imports should be removed alongside the code.
 
 ## Types 
 
