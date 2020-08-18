@@ -65,6 +65,7 @@ A set of rules base on current context of the ViettelPay App development
   + [Use Context-Specific XML Files](#use-context-specific-xml-files)
   + [XML Attribute Ordering](#xml-attribute-ordering)
   + [View IDs](#view-ids)
+  + [Drawable Files](#drawable-files)
 - [Language](#language)
 
 ## Nomenclature
@@ -1165,6 +1166,23 @@ __GOOD:__
 <android.support.v7.widget.RecyclerView
     android:id="@+id/dance_moves"
     />
+```
+
+### Drawable Files
+
+Drawable resource files should be named using the ic_ prefix along with the size and color of the asset. For example, white accept icon sized at 24dp would be named:
+
+```xml
+ic_accept_24sdp_white
+ic_cancel_48sdp_black
+```
+
+We use this naming convention so that a drawable file is recognisable by its name. If the colour and size are not stated in the name, then the developer needs to open the drawable file to find out this information. This saves us a little bit of time.
+If the drawable files is stored in local modules, it should be prefixed with moudle name.
+
+```xml
+commons_ic_accept_24sdp_white
+network_ic_cancel_48sdp_black
 ```
 
 ## Language
