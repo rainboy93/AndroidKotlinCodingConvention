@@ -30,6 +30,10 @@
   + [Companion Objects](#companion-objects)
   + [Optionals](#optionals)
 - [XML Guidance](#xml-guidance)
+  + [XML File Names](#xml-file-names)
+  + [Indentation](#indentation-1)
+  + [Use Context-Specific XML Files](#use-context-specific-xml-files)
+  + [XML Attribute Ordering](#xml-attribute-ordering)
 - [Language](#language)
 
 ## Nomenclature
