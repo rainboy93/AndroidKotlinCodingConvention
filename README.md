@@ -1,4 +1,4 @@
-# AndroidKotlinCodingConvention
+# Android Kotlin Coding Convention
 
 ## Table of Contents
 
@@ -31,10 +31,6 @@
   + [Optionals](#optionals)
 - [XML Guidance](#xml-guidance)
 - [Language](#language)
-- [Copyright Statement](#copyright-statement)
-- [Smiley Face](#smiley-face)
-- [Credit](#credits)
-
 
 ## Nomenclature
 
@@ -47,18 +43,18 @@ Package names are similar to Java: all __lower-case__, multiple words concatenat
 __BAD__:
 
 ```kotlin
-com.RayWenderlich.funky_widget
+vn.ViettelPay.network
 ```
 
 __GOOD__:
 
 ```kotlin
-com.raywenderlich.funkywidget
+vn.viettelpay.network
 ```
 
 ### Classes & Interfaces
 
-Written in __UpperCamelCase__. For example `RadialSlider`. 
+Written in __UpperCamelCase__. For example `BaseCallAdapter`. 
 
 ### Methods
 
@@ -175,12 +171,12 @@ data class Person(val name: String)
 Enum classes without methods may be formatted without line-breaks, as follows:
 
 ```kotlin
-private enum CompassDirection { EAST, NORTH, WEST, SOUTH }
+enum class AccountStatus { ACTIVE, LOCK_WRONG_PIN, LOCK_BY_CUSTOMER, CANCEL; }
 ```
 
 ## Spacing
 
-Spacing is especially important in raywenderlich.com code, as code needs to be easily readable as part of the tutorial. 
+Spacing is especially important in coding, as code needs to be easily readable as part of the tutorial. 
 
 ### Indentation
 
@@ -188,7 +184,7 @@ Indentation is using spaces - never tabs.
 
 #### Blocks
 
-Indentation for blocks uses 2 spaces (not the default 4):
+Indentation for blocks uses 2 spaces:
 
 __BAD:__
 
@@ -208,7 +204,7 @@ for (i in 0..9) {
 
 #### Line Wraps
 
-Indentation for line wraps should use 4 spaces (not the default 8):
+Indentation for line wraps should use 4 spaces:
 
 __BAD:__
 
@@ -419,9 +415,16 @@ __GOOD:__
 - `fragment_main_screen.xml`
 - `button_rounded_edges.xml`
 
+If the XML files is store in local modules, it should be prefixed with module name.
+
+__GOOD:__
+
+- `commons_button_gradient.xml`
+- `commons_fragment_base.xml`
+
 ### Indentation
 
-Similarly to Java, indentation should be __two characters__.
+Similarly to Kotlin, indentation should be __two characters__.
 
 ### Use Context-Specific XML Files
 
