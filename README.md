@@ -51,7 +51,6 @@ A set of rules base on current context of the ViettelPay App development
 - [Types](#types)
   + [Type Inference](#type-inference)
   + [Constants vs. Variables](#constants-vs-variables)
-  + [Companion Objects](#companion-objects)
   + [Nullable Types](#nullable-types)
 - [XML Guidance](#xml-guidance)
   + [XML File Names](#xml-file-names)
@@ -753,10 +752,6 @@ val meaningOfLife = 42
 Constants are defined using the `val` keyword, and variables with the `var` keyword. Always use `val` instead of `var` if the value of the variable will not change.
 
 *Tip*: A good technique is to define everything using `val` and only change it to `var` if the compiler complains!
-
-### Companion Objects
-
-** TODO: A bunch of stuff about companion objects **
 
 ### Nullable Types
 
