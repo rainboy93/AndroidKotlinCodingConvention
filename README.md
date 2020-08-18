@@ -1,5 +1,7 @@
 # Android Kotlin Coding Convention
 
+A set of rules base on current context of the ViettelPay App development
+
 ## Table of Contents
 
 - [Nomenclature](#nomenclature)
