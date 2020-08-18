@@ -34,10 +34,15 @@
   + [Use `is` in case of comparing a class type](#use-is-in-case-of-comparing-a-class-type)
   + [Use `range` in case comparing Int values](#use-range-in-case-comparing-int-values)
   + [Don't start a new line in variable declaration using `if-else`](#dont-start-a-new-line-in-variable-declaration-using-if-else)
+- [Scope function](#scope-function)
+  + [Should use scope function](#should-use-scope-function)
+  + [Don't declare variables that used only once](#dont-declare-variables-that-used-only-once)
+  + [which use `run` or `let`](#which-use-run-or-let)
 - [Types](#types)
   + [Type Inference](#type-inference)
   + [Constants vs. Variables](#constants-vs-variables)
   + [Companion Objects](#companion-objects)
+  + [Nullable Types](#nullable-types)
 - [XML Guidance](#xml-guidance)
   + [XML File Names](#xml-file-names)
   + [Indentation](#indentation-1)
@@ -393,20 +398,20 @@ when (anInput) {
 
 ```kotlin
 val array = ArrayList<Int>()
+```
 
-// bad
+__BAD:__
+```kotlin
 array.get(0)    
 
-// good
+getActivity().finish()
+```
+
+__GOOD:__
+```kotlin
 array[0]
 
-
-// bad
-getActivity().finish()
-
-// good
-activity.finish()
-
+requireActivity().finish()
 ```
 
 #### Use a smart cast
@@ -423,27 +428,34 @@ fun hoge(context: Context) {
     context as Activity
     context.finish() // finish activity
 }
+```
 
-// bad
+__BAD:__
+```kotlin
 if (hoge !is Hoge) {
     throw IllegalArgumentException("not Hoge!")
 }
 hoge.foo()
+```
 
-// good
+__GOOD:__
+```kotlin
 hoge as? Hoge ?: throw IllegalArgumentException("not Hoge!")
 hoge.foo()
 ```
 
 #### `it` in Lambda expression applies to wide scope
 
+__BAD:__
 ```kotlin
 // bad
 { hoge -> 
   hoge?.let { it.foo() }
 }
+```
 
-// good
+__GOOD:__
+```kotlin
 { 
   it?.let { hoge -> hoge.foo() }
 }
@@ -477,43 +489,50 @@ fun Display.getSize(): Point = Point().apply { getSize(this) }
 
 You don't have to write for loop because threre is `forEach` in collections package of Kotlin.
 
+__BAD:__
 ```kotlin
-// not good
 for (i in 0..9) {
 }
+```
 
-// good
+__GOOD:__
+```kotlin
 (0..9).forEach {
 }
 
-// good (if you want to know index)
 (0..9).forEachIndexed { index, value ->
 }
 ```
 
 #### Use `to` expression creating `Pair` class
 
+__BAD:__
 ```kotlin
-// bad
 val pair = Pair(foo, bar) 
+```
 
-// good 
+__GOOD:__
+```kotlin
 val pair = foo to bar
 ```
 
 * `to` is infix function
 
-`public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that)`
+```kotlin public infix fun <A, B> A.to(that: B): Pair<A, B> = Pair(this, that)```
 
 #### Use `range`
 
 ```kotlin
 val char = 'K'
+```
 
-// bad
+__BAD:__
+```kotlin
 if (char >= 'A' && 'c' <= 'Z') print("Hit!")
+```
 
-// good
+__GOOD:__
+```kotlin
 if (char in 'A'..'Z') print("Hit!")
 
 when (char) {
@@ -524,8 +543,8 @@ when (char) {
 
 #### Use `when` in case there are two or more branches of if-else
 
+__BAD:__
 ```kotlin
-// bad
 val hoge = 10if (hoge > 10) {
 
 } else if (hoge > 5) {
@@ -535,8 +554,10 @@ val hoge = 10if (hoge > 10) {
 } else {
 
 }
+```
 
-// good
+__GOOD:__
+```kotlin
 when {
     hoge > 10 -> print("10")
     hoge > 5 -> print("0")
@@ -573,61 +594,125 @@ when (hoge) {
 
 ```kotlin
 val foo: Int = 5
+```
 
-// bad
+__BAD:__
+```kotlin
 val bar = if (foo > 10) {
     "kotlin"
 } else {
     "java"
 }
+```
 
-// good
+__GOOD:__
+```kotlin
 val bar = if(foo > 10) "kotlin" else "java"
 ```
 
-#### Don't use `!!`
+## Scope function
 
-Don't use `!!`, it will erase the benefits of Kotlin.  
-You use it only when you want to explicitly raise a Null Pointer Exception.
+### Should use scope function
 
-#### Use a scope function in case of checking a null value
-
-```Kotlin
+```kotlin
 class Hoge {
     fun fun1() {}
     fun fun2() {}
-    fun fun3() = true
 }
+```
 
-var hoge: Hoge? = null
+__BAD:__
+```kotlin
+val hoge = Hoge()
+hoge.fun1()
+hoge.fun2()
+```
 
-// not good
-if (hoge != null) {
-    hoge.fun1()
-} else {
-    val hoge = Hoge()
-    hoge.fun1()
-    hoge.fun2()
-}
-
-// good
-hoge?.run { 
+__GOOD:__
+```kotlin
+val hoge = Hoge().apply {
    fun1()
-} ?: run {
-    hoge = Hoge().apply {
-        fun1()
-        fun2()
-    }
+   fun2()
 }
+```
 
-// good
-if (hoge != null && hoge.fun3()) {
-    hoge.fun1()
-} else {
-    hoge = Hoge().apply {
-       fun1()
-       fun2()
-    }
+You don't need to use `with` because you can substitute `run`, `let`, `apply`, `also`.
+
+### Don't declare variables that used only once
+
+You can express using a scope function.  
+But it becomes hard to read in case it excessibely use.  
+You should declare variables if you need to think.
+
+```kotlin
+class Foo
+
+class Bar(val foo: Foo)
+
+class Hoge {
+    fun fun1() {}
+    fun fun2(bar: Bar) {}
+    fun fun3(foo: Foo) {}
+}
+```
+
+__BAD:__
+```kotlin
+val hoge = Hoge()
+val foo = Foo()
+val bar = Bar(foo)
+hoge.fun1()
+hoge.fun2(bar)
+hoge.fun3(foo)
+```
+
+__GOOD:__
+```kotlin
+Hoge().run {    
+   fun1()
+   Foo().let {        
+       fun2(Bar(it))
+       fun3(it)
+   }
+}
+```
+
+### which use `run` or `let`
+
+* Use `let` to substitute into functions
+* Use `run` to use outside functions
+
+```kotlin
+class Foo
+
+class Bar(val foo: Foo)
+
+class Hoge {
+    fun fun1() {}
+    fun fun2(bar: Bar) {}
+    fun fun3(foo: Foo) {}
+}
+```
+
+__BAD:__
+```kotlin
+Hoge().let {
+   it.fun1()
+   Foo().run {
+       it.fun2(Bar(this))
+       it.fun3(this)
+   }
+}
+```
+
+__GOOD:__
+```kotlin
+Hoge().run {    
+   fun1()
+   Foo().let {        
+       fun2(Bar(it))
+       fun3(it)
+   }
 }
 ```
 
@@ -677,7 +762,217 @@ When accessing a nullable value, use the safe call operator if the value is only
 editText?.setText("foo")
 ```
 
+#### Don't use `!!`
 
+Don't use `!!`, it will erase the benefits of Kotlin.  
+You use it only when you want to explicitly raise a Null Pointer Exception.
+
+#### Use a scope function in case of checking a null value
+
+```Kotlin
+class Hoge {
+    fun fun1() {}
+    fun fun2() {}
+    fun fun3() = true
+}
+
+var hoge: Hoge? = null
+
+// not good
+if (hoge != null) {
+    hoge.fun1()
+} else {
+    val hoge = Hoge()
+    hoge.fun1()
+    hoge.fun2()
+}
+
+// good
+hoge?.run { 
+   fun1()
+} ?: run {
+    hoge = Hoge().apply {
+        fun1()
+        fun2()
+    }
+}
+
+// good
+if (hoge != null && hoge.fun3()) {
+    hoge.fun1()
+} else {
+    hoge = Hoge().apply {
+       fun1()
+       fun2()
+    }
+}
+```
+
+## Function
+
+### Omit a type of return value
+
+Basically, we omit a type of return value as declaration variables using type interface.  
+You should write it in case we cannot guess from a method name.  
+
+```kotlin
+fun createIntent(context: Context, foo: Int, bar: Boolean) = 
+Intent(context, HogeActivity::class.java).apply {    
+   putExtra("foo", foo)
+   putExtra("bar", bar)
+}
+
+fun hoge(value: Int): String = when (value) {
+   in 0..10 -> "foo"
+   in 100..500 -> "bar"
+   else -> "else"
+}
+```
+
+
+### Don't name `setHoge`, `getHoge`
+
+Don't name `setHoge`, `getHoge` at property and function because it is used in Kotlin language.
+
+__BAD:__
+```kotlin
+fun setHoge() {
+}
+```
+
+### Use named arguments for function overloading
+
+__BAD:__
+```kotlin
+class Hoge {
+   fun hoge() {
+      print("hoge")
+   }
+
+   fun hoge(prefix: String) {
+       print(prefix + "hoge")
+   }
+}
+```
+
+__GOOD:__
+```kotlin
+class Hoge {
+   fun hoge(prefix: String = "") {
+      print(prefix + "hoge")
+   }
+}
+```
+
+### Use typealias
+
+__BAD:__
+```kotlin
+interface CallBackListener {
+   fun onHoge(foo: String, bar: Int)
+}
+
+// caller
+var callback: CallBackListener? = null
+callback?.onHoge("foo", 100)
+
+// callee
+val callback = object : CallBackListener {
+  override fun onHoge(foo: String, bar: Int) {
+    print("$foo : $bar")
+  }
+}
+```
+
+__GOOD:__
+```kotlin
+typealias CallBackListener = (foo: String, bar: Int) -> Unit
+
+// caller
+var callback: CallBackListener? = null
+callback?.invoke("foo", 100)
+
+// callee
+val callback = { foo, bar -> 
+  print("$foo : $bar")
+}
+```
+
+### Extension functions
+
+* Use it as utility functions in Java
+* It is not necessary to use extension functions in case it is defined wide scope.
+ i.g. String
+ In case we recommend the private extension functions.
+
+* Extension class name : `HogeExt.kt`
+
+* Structure of package 
+
+```
+main
+ |-data
+ |-ui
+   |-util
+     |-ext
+ |-util
+   |-ext
+```
+
+### Private extension functions
+
+Functions taking only one object as an argument replace private extension functions. (not necessary)
+
+```kotlin
+enum class Hoge() {
+    FOO,
+    BAR,
+    NONE
+}
+```
+
+__BAD:__
+```kotlin
+fun toHoge(arg: String): Hoge {
+    if (!arg.startsWith("hoge")) {
+        return Hoge.NONE    
+    }
+    return when (arg) {
+       "hogeFoo" -> Hoge.FOO
+       "hogeBar" -> Hoge.BAR
+       else -> Hoge.NONE
+    }
+}
+```
+
+__GOOD:__
+```kotlin
+fun String.toHoge(): Hoge {
+    if (!startsWith("hoge")) {
+        return Hoge.NONE    
+    }
+    return when (this) {
+       "hogeFoo" -> Hoge.FOO
+       "hogeBar" -> Hoge.BAR
+       else -> Hoge.NONE    }
+    }
+}
+```
+
+### Don't create extension functions in same class.
+
+```kotlin
+class Hoge {
+
+   // bad
+   fun Hoge.foo() {
+   }
+
+   // good
+   fun foo() {
+   }
+}
+```
 
 ## XML Guidance
 
