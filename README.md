@@ -774,7 +774,7 @@ You use it only when you want to explicitly raise a Null Pointer Exception.
 
 #### Use a scope function in case of checking a null value
 
-```Kotlin
+```kotlin
 class Hoge {
     fun fun1() {}
     fun fun2() {}
@@ -782,8 +782,10 @@ class Hoge {
 }
 
 var hoge: Hoge? = null
+```
 
-// not good
+__BAD:__
+```kotlin
 if (hoge != null) {
     hoge.fun1()
 } else {
@@ -791,8 +793,10 @@ if (hoge != null) {
     hoge.fun1()
     hoge.fun2()
 }
+```
 
-// good
+__GOOD:__
+```kotlin
 hoge?.run { 
    fun1()
 } ?: run {
@@ -801,8 +805,10 @@ hoge?.run {
         fun2()
     }
 }
+```
 
-// good
+__GOOD:__
+```kotlin
 if (hoge != null && hoge.fun3()) {
     hoge.fun1()
 } else {
