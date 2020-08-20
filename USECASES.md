@@ -14,7 +14,8 @@ Always use the base UI class, ```vn.viettelpay.ui.BaseActivity``` and ```vn.viet
 ## Add new features module
 
 There is a template feature module inside ```features``` group. To add a new module, just clone the module and follow below checklists:
-- Change name of the new module, change the package name as well as package inside ```AndroidManifest.xml```, by now it is ```vn.viettelpay.template```
+- Change name of the new module, change the package name as well as package inside ```AndroidManifest.xml```, by now it is ```vn.viettelpay.template```.
+  The package name should be ```vn.viettelpay.[feature_name]```
 - Inside ```setting.gradle.kts```, include new module by adding ```"features:template"``` to the last line
 - Inside ```BuildModules.kt```, add new variable in Features object like
   ```kotlin
