@@ -3,8 +3,13 @@
 ## Table of Contents
 
 - [Add new features module](#add-new-features-module)
-- [Image loading](#image-loading)
+- [UI](#ui)
 - [Using ViewModel in right way](#using-viewmodel-in-right-way)
+- [Image loading](#image-loading)
+
+## UI
+
+Always use the base UI class, ```vn.viettelpay.ui.BaseActivity``` and ```vn.viettelpay.ui.BaseFragment``` for fragment.
 
 ## Add new features module
 
@@ -17,10 +22,6 @@ There is a template feature module inside ```features``` group. To add a new mod
   ```
 - Inside ```build.gradle.kts``` of the ```app``` module, add ```BuildModules.Features.TEMPLATE``` in block ```dynamicFeatures```
 - Sync the project
-
-## Image loading
-
-We use [Coil](https://coil-kt.github.io/coil) to display image. For more information, please go to [Coil Github page](https://coil-kt.github.io/coil)
 
 ## Using ViewModel in right way
 
@@ -48,3 +49,7 @@ We use [Coil](https://coil-kt.github.io/coil) to display image. For more informa
       val singleLiveDataText by handle.singleLiveEvent<String?>()
   }
   ```
+
+## Image loading
+
+We use [Coil](https://coil-kt.github.io/coil) to display image. For more information, please go to [Coil Github page](https://coil-kt.github.io/coil)
