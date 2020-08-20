@@ -18,6 +18,10 @@ There is a template feature module inside ```features``` group. To add a new mod
 - Inside ```build.gradle.kts``` of the ```app``` module, add ```BuildModules.Features.TEMPLATE``` in block ```dynamicFeatures```
 - Sync the project
 
+## Image loading
+
+We use [Coil](https://coil-kt.github.io/coil) to display image. For more information, please go to [Coil Github page](https://coil-kt.github.io/coil)
+
 ## Using ViewModel in right way
 
 - Always inherit from ```vn.viettelpay.ui.BaseViewModel```
