@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Add new features module](#add-new-features-module)
-- [Image loading](#image_loading)
+- [Image loading](#image-loading)
 - [Using ViewModel in right way](#using-viewmodel-in-right-way)
 
 ## Add new features module
