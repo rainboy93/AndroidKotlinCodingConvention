@@ -4,7 +4,7 @@
 
 - [Add new features module](#add-new-features-module)
 - [Image loading](#image_loading)
-- [Using ViewModel in right way](using-viewmodel-in-right-way)
+- [Using ViewModel in right way](#using-viewmodel-in-right-way)
 
 ## Add new features module
 
