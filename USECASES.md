@@ -4,9 +4,9 @@
 
 - [Add new features module](#add-new-features-module)
 - [UI](#ui)
+- [Dependency Injection](#dependency-injection)
 - [Using ViewModel in right way](#using-viewmodel-in-right-way)
 - [Image loading](#image-loading)
-- [Dependency Injection](#dependency-injection)
 
 ## UI
 
@@ -24,6 +24,28 @@ There is a template feature module inside ```features``` group. To add a new mod
   ```
 - Inside ```build.gradle.kts``` of the ```app``` module, add ```BuildModules.Features.TEMPLATE``` in block ```dynamicFeatures```
 - Sync the project
+
+## Dependency Injection
+
+We use [Koin](https://doc.insert-koin.io/) as Dependency Injection Framework.
+One important note: For `Dynamic Feature Module`, we need to load Koin modules onCreate of Activity or Fragment before using it.
+
+```kotlin
+private val loadModules by lazy {
+    loadKoinModules(myModule)
+}
+
+private fun injectFeatures = loadModules
+
+
+class MyFragment: Fragment() {
+    override fun onCreate() {
+        ...
+        injectFeatures()
+        ...
+    }
+}
+```
 
 ## Using ViewModel in right way
 
@@ -55,25 +77,3 @@ There is a template feature module inside ```features``` group. To add a new mod
 ## Image loading
 
 We use [Coil](https://coil-kt.github.io/coil) to display image. For more information, please go to [Coil Github page](https://coil-kt.github.io/coil)
-
-## Dependency Injection
-
-We use [Koin](https://doc.insert-koin.io/) as Dependency Injection Framework.
-One important note: For `Dynamic Feature Module`, we need to load Koin modules onCreate of Activity or Fragment before using it.
-
-```kotlin
-private val loadModules by lazy {
-    loadKoinModules(myModule)
-}
-
-private fun injectFeatures = loadModules
-
-
-class MyFragment: Fragment() {
-    override fun onCreate() {
-        ...
-        injectFeatures()
-        ...
-    }
-}
-```
