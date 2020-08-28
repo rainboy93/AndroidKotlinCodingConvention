@@ -68,9 +68,6 @@ class MyFragment: Fragment() {
 
       // MutableLiveData that is saved in the SavedState
       val liveDataText by handle.livedata<String?>()
-
-       // SingleLiveEvent that is saved in the SavedState
-      val singleLiveDataText by handle.singleLiveEvent<String?>()
   }
   ```
 
