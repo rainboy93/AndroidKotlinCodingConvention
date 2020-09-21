@@ -1,3 +1,32 @@
+# Buttons
+
+There are two types of buttons ```CoreButtonType.GRADIENT``` and ```CoreButtonType.OUTLINE```, three types of button size ```CoreButtonSize.SMALL```, ```CoreButtonSize.MEDIUM```, and ```CoreButtonSize.LARGE```
+
+Attributes:
+- ```cbtText``` String or resource id text for button
+- ```cbtSize``` Define button size ```small, medium, large```
+- ```cbtType``` Define button type ```gradient, outline```
+
+Sample code 
+```kotlin
+// Gradient small
+<vn.viettelpay.views.button.CoreButton
+        android:id="@+id/buttonSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cbtSize="small"
+        app:cbtText="Button Small"
+        app:cbtType="gradient"/>
+// Outline medium
+<vn.viettelpay.views.button.CoreButton
+        android:id="@+id/buttonSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cbtSize="medium"
+        app:cbtText="Button Small"
+        app:cbtType="outline"/>
+```
+
 # Divider
 
 The default divider is configured using the values of the theme attributes and it can be attached to a ```RecyclerView``` in Kotlin with:
