@@ -8,7 +8,7 @@
 - [Using ViewModel in right way](#using-viewmodel-in-right-way)
 - [Image loading](#image-loading)
 - [Animations](#animations)
-- [RecyclerView Adapter](#recyclerview_adapter)
+- [RecyclerView Adapter](#recycler_view_adapter)
 
 ## UI
 
