@@ -87,7 +87,7 @@ please {
 }.start()
 ```
 
-- Follow scroll
+### Follow scroll
 
 Use `setPercent` to apply modify the current step of the animation
 
@@ -108,7 +108,7 @@ scrollview.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v
 ```
 
 
-- Chain animations
+### Chain animations
 
 Just ask the kotlin's animation if he wants to execute another animation after, using `thenCouldYou animate`
 
@@ -124,7 +124,7 @@ please(duration = 1000L) {
 }.start()
 ```
 
-- Apply directly
+### Apply directly
 
 If you want your animation to be applied directly, be bossy with kotlin and force it to apply it using `now()` !
 
@@ -136,7 +136,7 @@ please {
 }.now();
 ```
 
-- Reset
+### Reset
 
 Use `reset` to return to the initial state of views
 
@@ -144,7 +144,7 @@ Use `reset` to return to the initial state of views
 animation.reset():
 ```
 
-- List of expectations
+### List of expectations
 
 ```
 please {
@@ -214,3 +214,170 @@ please {
      atItsOriginalRotation()
 }
 ````
+
+## RecyclerView Adapter
+Convenient Kotlin DSL which provides utility on top of Android's normal RecyclerView.Adapter.
+
+### adapterOf
+```kt
+ val recyclerViewAdapter = adapterOf<Text> {
+                register(
+                    layoutResource = R.layout.adapter_message_text_item,
+                    viewHolder = ::TextMessageViewHolder,
+                    onViewHolderCreated = { vh->
+                       //you may handle your on click listener
+                       vh.itemView.setOnClickListener {
+
+                       }
+                    },
+                    onBindViewHolder = { vh, _, it ->
+                        vh.messageText.text = it.text
+                        vh.sentAt.text = it.sentAt
+                    }
+                )
+     }
+
+ recyclerView.adapter = recyclerViewAdapter
+ ```
+
+### pagingDataAdapterOf
+```kt
+ val pagingDataAdapterOf = pagingDataAdapterOf<Text> {
+                register(
+                    layoutResource = R.layout.adapter_message_text_item,
+                    viewHolder = ::TextMessageViewHolder,
+                    onViewHolderCreated = { vh->
+                       //you may handle your on click listener
+                       vh.itemView.setOnClickListener {
+
+                       }
+                    },
+                    onBindViewHolder = { vh, _, it ->
+                        vh.messageText.text = it.text
+                        vh.sentAt.text = it.sentAt
+                    }
+                )
+     }
+
+ recyclerView.adapter = recyclerViewAdapter
+ ```
+
+
+### Different View Types:
+
+You may register different `ViewHolder`s to your adapters.
+
+```kt
+              register(
+                    layoutResource = R.layout.adapter_message_text_item,
+                    viewHolder = ::TextMessageViewHolder,
+                    onBindViewHolder = { vh, _, it ->
+                        vh.messageText.text = it.text
+                        vh.sentAt.text = it.sentAt
+                    }
+                )
+
+                register(
+                    layoutResource = R.layout.adapter_message_image_item,
+                    viewHolder = ::ImageMessageViewHolder,
+                    onBindViewHolder = { vh, _, item ->
+                        vh.messageText.text = item.text
+                        vh.sentAt.text = item.sentAt
+
+                        Glide.with(vh.messageImage)
+                            .load(item.imageUrl)
+                            .into(vh.messageImage)
+                    }
+                )
+```
+### Handling Events:
+
+As `ViewHolder` instance is accessible in:
+- `onViewHolderCreated`
+- `onBindViewHolder`
+- `onBindViewHolderWithPayload`
+
+
+You can handle the events in the same way how you did it before.
+```kt
+ val recyclerViewAdapter = adapterOf<Text> {
+                register(
+                    layoutResource = R.layout.adapter_message_text_it,
+                    viewHolder = ::TextMessageViewHolder,
+                    onViewHolderCreated = { vh->
+                       vh.itemView.setOnClickListener {
+
+                       }
+                       vh.messageText.addTextChangedListener{text ->
+
+                       }
+                    },
+                    onBindViewHolder = { vh, _, it ->
+                        vh.messageText.text = it.text
+                        vh.sentAt.text = it.sentAt
+                    }
+                )
+ }
+
+recyclerView.adapter = recyclerViewAdapter
+```
+### View Binding:
+
+As `ViewHolder` instance is accessible in:
+`onViewHolderCreated`
+`onBindViewHolder`
+`onBindViewHolderWithPayload`
+
+You may define your ViewBinding in your ViewHolder class and you can easily reach it:
+
+```kt
+
+class TextMessageViewHolder(view: View) : RecyclerViewHolder<Text>(view) {
+    val binding = AdapterTextItemBinding.bind(view)
+}
+
+val recyclerViewAdapter = adapterOf<Text> {
+                register(
+                    layoutResource = R.layout.adapter_message_text_it,
+                    viewHolder = ::TextMessageViewHolder,
+                    onViewHolderCreated = { vh->
+                       vh.binding.
+                    },
+                    onBindViewHolder = { vh, _, it ->
+                       vh.binding.messageText.text = it.text
+                       vh.binding.sentAt.text = it.sentAt
+                    }
+                )
+ }
+```
+
+### DiffUtil:
+
+```kt
+val recyclerViewAdapter = adapterOf<MessageViewState> {
+                diff(
+                    areContentsTheSame = { old, new -> old == new },
+                    areItemsTheSame = { old, new -> old.message.id == new.message.id },
+                    getChangePayload = { oldItem, newItem ->
+                        val diffBundle = Bundle()
+
+                        if (oldItem.selectionState != newItem.selectionState) {
+                            diffBundle.putParcelable(
+                                TextMessageViewHolder.KEY_SELECTION,
+                                newItem.selectionState
+                            )
+                        }
+
+                        if (diffBundle.isEmpty) null else diffBundle
+                    }
+                )
+                register (
+                    layoutResource = R.layout.adapter_message_text_item,
+                    viewHolder = ::TextMessageViewHolder,
+                    onBindViewHolder = { vh, _, it ->
+                        vh.messageText.text = it.message.text
+                        vh.sentAt.text = it.message.sentAt
+                    }
+                )
+
+```
