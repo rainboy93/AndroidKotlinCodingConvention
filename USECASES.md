@@ -7,6 +7,8 @@
 - [Dependency Injection](#dependency-injection)
 - [Using ViewModel in right way](#using-viewmodel-in-right-way)
 - [Image loading](#image-loading)
+- [Animations](#animations)
+- [RecyclerView Adapter](#recyclerview_adapter)
 
 ## UI
 
