@@ -2,12 +2,12 @@
 
 There are two types of buttons ```CoreButtonType.GRADIENT``` and ```CoreButtonType.OUTLINE```, three types of button size ```CoreButtonSize.SMALL```, ```CoreButtonSize.MEDIUM```, and ```CoreButtonSize.LARGE```
 
-Attributes:
+## Attributes:
 - ```cbtText``` String or resource id text for button
 - ```cbtSize``` Define button size ```small, medium, large```
 - ```cbtType``` Define button type ```gradient, outline```
 
-Sample code 
+## Sample code 
 ```kotlin
 // Gradient small
 <vn.viettelpay.views.button.CoreButton
