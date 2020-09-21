@@ -74,3 +74,143 @@ class MyFragment: Fragment() {
 ## Image loading
 
 We use [Coil](https://coil-kt.github.io/coil) to display image. For more information, please go to [Coil Github page](https://coil-kt.github.io/coil)
+
+## Animations
+
+```kotlin
+please {
+   animate(avatar) toBe {
+      bottomOfItsParent(marginDp = 36f)
+      leftOfItsParent(marginDp = 16f)
+      width(40, keepRatio = true, toDp = true)
+   }
+}.start()
+```
+
+- Follow scroll
+
+Use `setPercent` to apply modify the current step of the animation
+
+Exemple with a scrollview
+
+```kotlin
+val animation = please {
+        animate(avatar) toBe {
+           topOfItsParent(marginDp = 20f)
+           leftOfItsParent(marginDp = 20f)
+           scale(0.5f, 0.5f)
+        }
+}
+scrollview.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+    val percent = scrollY * 1f / v.maxScrollAmount
+    animation.setPercent(percent)
+})
+```
+
+
+- Chain animations
+
+Just ask the kotlin's animation if he wants to execute another animation after, using `thenCouldYou animate`
+
+```
+please(duration = 1000L) {
+   animate(image, withCameraDistance = 500f) toBe {
+      flippedHorizontally()
+   }
+}.thenCouldYou(duration = 500L) {
+   animate(image, withCameraDistance = 1000f) toBe {
+      alpha(0.5f)
+   }
+}.start()
+```
+
+- Apply directly
+
+If you want your animation to be applied directly, be bossy with kotlin and force it to apply it using `now()` !
+
+```kotlin
+please {
+   animate(view) toBe {
+      outOfScreen(Gravity.BOTTOM)
+   }
+}.now();
+```
+
+- Reset
+
+Use `reset` to return to the initial state of views
+
+```kotlin
+animation.reset():
+```
+
+- List of expectations
+
+```
+please {
+  animate(view) { //toBe is optional
+
+     rightOf(view, marginDp=)
+     leftOf(view, marginDp=)
+     belowOf(view, marginDp=)
+     aboveOf(view, marginDp=)
+
+     originalPosition()
+
+     sameCenterAs(view, horizontal=, vertical=)
+     sameCenterHorizontalAs(view)
+     sameCenterVerticalAs(view)
+     centerInParent(horizontal=, vertical=)
+     centerVerticalInParent()
+     centerHorizontalInParent()
+
+     centerBetweenViews(view1, view2, horizontal, vertical)
+     centerBetweenViewAndParent(otherView, horizontal, vertical, toBeOnRight, toBeOnBottom)
+
+     topOfItsParent()
+     rightOfItsParent()
+     bottomOfItsParent()
+     leftOfItsParent()
+
+     alignBottom(otherView, marginDp=)
+     alignTop(otherView)
+     alignLeft(otherView)
+     alignRight(otherView)
+
+     outOfScreen(gravitiy)  //Gravity.LEFT / Gravity.RIGHT / Gravity.TOP / Gravity.BOTTOM
+
+     alpha(alpha)
+     sameAlphaAs(otherView)
+     visible()
+     invisible()
+
+     custom(object: CustomAnimExpectation(){ ... })
+
+     originalScale()
+
+     scale(scaleX, scaleY)
+     height(height, keepRatio=, useDp=)
+     width(width, keepRatio=, useDp=)
+     sameScaleAs(otherView)
+     sameWidthAs(otherView)
+     sameHeightAs(otherView)
+
+     marginTop(margin)
+     marginBottom(margin)
+     marginRight(margin)
+     marginLeft(margin)
+
+     paddingTop(padding)
+     paddingBottom(padding)
+     paddingRight(padding)
+     paddingLeft(padding)
+
+     textColor(textColor)
+     textSize(textSize)
+     backgroundAlpha(alpha)
+
+     rotated(rotation)
+     vertical(bottomOfViewAtLeft)
+     atItsOriginalRotation()
+}
+````
