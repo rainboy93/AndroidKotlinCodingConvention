@@ -1,3 +1,29 @@
+# RadioButton
+
+## Attributes:
+- ```rbText``` String resource id for button
+
+## Sample code 
+```kotlin
+ <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <vn.viettelpay.views.VDSRadioButton
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/tokenSpacing16"
+          app:rbText="@string/app_name" />
+
+        <vn.viettelpay.views.VDSRadioButton
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/tokenSpacing16"
+          app:rbText="@string/app_name"  />
+ </RadioGroup>
+```
+
 # CheckBox
 
 ## Attributes:
