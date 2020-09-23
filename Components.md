@@ -1,3 +1,29 @@
+# TextView
+
+## Attributes:
+- ```tvText``` String resource id for TextView
+- ```tvPreventFastClick``` Prevent clicking too fast
+- ```tvEnableClickEffect``` DefineAlpha pressed effect
+- ```tvEnableAutoScroll``` Auto scroll for long horizontal text
+
+## Sample code 
+```kotlin
+<vn.viettelpay.views.VDSTextView
+      android:id="@+id/inputTitle"
+      style="@style/fontBold16"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/tokenSpacing16"
+      android:textColor="@color/tokenBlue100"
+      app:layout_constraintBottom_toBottomOf="@+id/buttonShowError"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/buttonShowError"
+      app:tvEnableAutoScroll="true"
+      app:tvEnableClickEffect="true"
+      app:tvPreventFastClick="true"
+      app:tvText="@string/app_name" />
+```
+
 # Buttons
 
 There are two types of buttons ```CoreButtonType.GRADIENT``` and ```CoreButtonType.OUTLINE```, three types of button size ```CoreButtonSize.SMALL```, ```CoreButtonSize.MEDIUM```, and ```CoreButtonSize.LARGE```
