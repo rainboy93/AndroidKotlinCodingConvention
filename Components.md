@@ -1,3 +1,31 @@
+# CheckBox
+
+## Attributes:
+- ```cbText``` String resource id for CheckBox
+
+## Sample code 
+```kotlin
+ <vn.viettelpay.views.VDSCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/tokenSpacing16"
+        app:cbText="@string/app_name" />
+```
+
+# Badge
+
+## Attributes:
+- ```bType``` Define badge color type ```red, cyan, green, yellow```
+
+## Sample code 
+```kotlin
+<vn.viettelpay.views.VDSBadge
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="99"
+      app:bType="red" />
+```
+
 # TextView
 
 ## Attributes:
