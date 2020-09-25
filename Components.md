@@ -31,12 +31,12 @@ var actionListener: NavigationBarActionListener? = null
 
 ```kotlin
  viewBinding.navigationBar.navigationBackType = NavigationBackType.NONE
- viewBinding.searchBar.actionListener = object : NavigationBarActionListener {
+ viewBinding.navigationBar.actionListener = object : NavigationBarActionListener {
    override fun onClick(action: NavigationBarAction, position: Int) {
      requireActivity().onBackPressed()
    }
  }
- viewBinding.searchBar.setUpNavigationBar(requireActivity(), NavigationBarAction(nameRaw = "Đóng"))
+ viewBinding.navigationBar.setUpNavigationBar(requireActivity(), NavigationBarAction(nameRaw = "Đóng"))
 ```
 
 # CardView
