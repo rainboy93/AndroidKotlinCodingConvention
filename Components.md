@@ -27,6 +27,14 @@ var actionListener: NavigationBarActionListener? = null
       android:layout_height="wrap_content"
       app:nbBackType="none"
       app:nbHeader="Navigation bar" />
+
+ viewBinding.navigationBar.navigationBackType = NavigationBackType.NONE
+ viewBinding.searchBar.actionListener = object : NavigationBarActionListener {
+   override fun onClick(action: NavigationBarAction, position: Int) {
+     requireActivity().onBackPressed()
+   }
+ }
+ viewBinding.searchBar.setUpNavigationBar(requireActivity(), NavigationBarAction(nameRaw = "Đóng"))
 ```
 
 # CardView
