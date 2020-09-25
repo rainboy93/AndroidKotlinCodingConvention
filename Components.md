@@ -1,3 +1,43 @@
+# CardView
+
+## Attributes:
+- ```cvType``` Define card shadow types ```basic, custom```
+- ```cvShadowStartColor``` Shadow start color of CardView
+- ```cvShadowEndColor``` Shadow end color of CardView
+- ```cvBackgroundColor``` Background color for CardView
+- ```cvCornerRadius``` Corner radius for CardView
+- ```cvElevation``` Elevation for CardView
+- ```cvMaxElevation``` Maximum Elevation for CardView
+- ```cvUseCompatPadding``` Add padding in API v21+ as well to have the same measurements with previous versions
+- ```cvPreventCornerOverlap``` Add padding to CardView on v20 and before to prevent intersections between the Card content and rounded corners
+- ```cvContentPadding``` Inner padding between the edges of the Card and children of the CardView
+- ```cvContentPaddingLeft``` Inner padding between the left edge of the Card and children of the CardView
+- ```cvContentPaddingRight``` Inner padding between the right edge of the Card and children of the CardView
+- ```cvContentPaddingTop``` Inner padding between the top edge of the Card and children of the CardView
+- ```cvContentPaddingBottom``` Inner padding between the bottom edge of the Card and children of the CardView
+- ```android:minWidth``` Workaround to read user defined minimum width
+- ```android:minHeight``` Workaround to read user defined minimum height
+
+## Sample code 
+```xml
+ <vn.viettelpay.views.cardview.VDSCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cvBackgroundColor="@color/tokenWhite"
+        app:cvCornerRadius="@dimen/tokenBorderRadius08"
+        app:cvPreventCornerOverlap="false">
+
+        <vn.viettelpay.views.VDSTextView
+          style="@style/fontBold32"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/_100sdp"
+          android:gravity="center"
+          android:text="Card"
+          android:textColor="@color/tokenCyan100"
+          tools:ignore="HardcodedText" />
+      </vn.viettelpay.views.cardview.VDSCardView>
+```
+
 # RadioButton
 
 ## Attributes:
