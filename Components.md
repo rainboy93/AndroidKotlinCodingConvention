@@ -1,3 +1,34 @@
+# NavigationBar
+
+## Attributes:
+- ```nbHeader``` String resource or raw string of this navigation bar title
+- ```nbBackType``` To change left button drawable based on types ```none, back, close```
+
+To set up a NavigationBar with Activity simply call
+```kotlin
+/**
+   * Initialize functions for NavigationBar
+   * @param activity activity context
+   * @param action action list of this NavigationBar
+   */
+  fun setUpNavigationBar(activity: Activity, vararg action: NavigationBarAction)
+```
+
+To receive callback when user tap the NavigationBar actions, assign a listener to
+```kotlin
+var actionListener: NavigationBarActionListener? = null
+```
+
+## Sample code 
+```xml
+ <vn.viettelpay.views.navigation.VDSNavigationBar
+      android:id="@+id/navigationBar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:nbBackType="none"
+      app:nbHeader="Navigation bar" />
+```
+
 # CardView
 
 ## Attributes:
